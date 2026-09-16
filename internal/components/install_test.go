@@ -23,7 +23,10 @@ func TestRequestValidate(t *testing.T) {
 		{name: "在线 latest"},
 		{name: "在线指定版本", request: Request{MihomoVersion: "v1.0.0"}},
 		{name: "完整离线包", request: Request{MihomoPackage: "mihomo.gz", EasyTierPackage: "easytier.zip"}},
+		{name: "仅安装 Mihomo 离线包", request: Request{Target: "mihomo", MihomoPackage: "mihomo.gz"}},
+		{name: "仅安装 EasyTier 离线包", request: Request{Target: "easytier", EasyTierPackage: "easytier.zip"}},
 		{name: "离线包不完整", request: Request{MihomoPackage: "mihomo.gz"}, wantErr: true},
+		{name: "未选择组件的离线包", request: Request{Target: "mihomo", MihomoPackage: "mihomo.gz", EasyTierPackage: "easytier.zip"}, wantErr: true},
 		{name: "混合来源", request: Request{MihomoPackage: "mihomo.gz", EasyTierPackage: "easytier.zip", MihomoVersion: "v1.0.0"}, wantErr: true},
 	}
 	for _, test := range tests {
@@ -68,6 +71,33 @@ func TestInstallerInstallLocalPackages(t *testing.T) {
 		if len(data) == 0 {
 			t.Fatalf("%s 未写入内容", name)
 		}
+	}
+}
+
+func TestInstallerInstallMihomoOnly(t *testing.T) {
+	dir := t.TempDir()
+	mihomoPackage := filepath.Join(dir, "mihomo-linux-amd64-v1.0.0.gz")
+	writeGzip(t, mihomoPackage, "mihomo binary")
+	installer := Installer{
+		BinDir:    filepath.Join(dir, "bin"),
+		BackupDir: filepath.Join(dir, "backups"),
+		GOARCH:    "amd64",
+	}
+	installed, err := installer.Install(context.Background(), Request{
+		Target:        "mihomo",
+		MihomoPackage: mihomoPackage,
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(installed) != 1 || installed[0].Name != "mihomo" {
+		t.Fatalf("安装结果 = %#v", installed)
+	}
+	if _, err := os.Stat(filepath.Join(installer.BinDir, "mihomo")); err != nil {
+		t.Fatalf("Mihomo 未安装: %v", err)
+	}
+	if _, err := os.Stat(filepath.Join(installer.BinDir, "easytier-core")); !os.IsNotExist(err) {
+		t.Fatalf("不应安装 EasyTier，err = %v", err)
 	}
 }
 

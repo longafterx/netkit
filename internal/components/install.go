@@ -20,6 +20,7 @@ import (
 
 // Request 描述在线或离线的完整组件安装请求。
 type Request struct {
+	Target          string
 	MihomoVersion   string
 	EasyTierVersion string
 	MihomoPackage   string
@@ -53,7 +54,7 @@ func New(rootDir string) Installer {
 	}
 }
 
-// Install 下载或解压两个组件后原子替换二进制，不重启服务。
+// Install 下载或解压指定组件后原子替换二进制，不重启服务。
 func (i Installer) Install(ctx context.Context, request Request) ([]Installed, error) {
 	if err := request.validate(); err != nil {
 		return nil, err
@@ -72,47 +73,73 @@ func (i Installer) Install(ctx context.Context, request Request) ([]Installed, e
 		return nil, err
 	}
 	defer os.RemoveAll(dir)
-	mihomo, mihomoVersion, err := i.acquire(ctx, dir, "mihomo", request.MihomoVersion, request.MihomoPackage)
-	if err != nil {
-		return nil, err
+	files := map[string]string{}
+	installed := []Installed{}
+	if request.installMihomo() {
+		mihomo, version, err := i.acquire(ctx, dir, "mihomo", request.MihomoVersion, request.MihomoPackage)
+		if err != nil {
+			return nil, err
+		}
+		path := filepath.Join(dir, "mihomo")
+		if err := extractGzip(mihomo, path); err != nil {
+			return nil, fmt.Errorf("解压 Mihomo: %w", err)
+		}
+		files["mihomo"] = path
+		installed = append(installed, Installed{Name: "mihomo", Path: filepath.Join(i.BinDir, "mihomo"), Version: version})
 	}
-	easyTier, easyTierVersion, err := i.acquire(ctx, dir, "easytier", request.EasyTierVersion, request.EasyTierPackage)
-	if err != nil {
-		return nil, err
-	}
-	mihomoBinary := filepath.Join(dir, "mihomo")
-	if err := extractGzip(mihomo, mihomoBinary); err != nil {
-		return nil, fmt.Errorf("解压 Mihomo: %w", err)
-	}
-	easyTierBinaries, err := extractZip(easyTier, dir)
-	if err != nil {
-		return nil, err
-	}
-	files := map[string]string{"mihomo": mihomoBinary}
-	for name, path := range easyTierBinaries {
-		files[name] = path
+	if request.installEasyTier() {
+		easyTier, version, err := i.acquire(ctx, dir, "easytier", request.EasyTierVersion, request.EasyTierPackage)
+		if err != nil {
+			return nil, err
+		}
+		binaries, err := extractZip(easyTier, dir)
+		if err != nil {
+			return nil, err
+		}
+		for name, path := range binaries {
+			files[name] = path
+		}
+		installed = append(installed, Installed{Name: "easytier", Path: filepath.Join(i.BinDir, "easytier-core"), Version: version})
 	}
 	if err := i.install(files); err != nil {
 		return nil, err
 	}
-	return []Installed{
-		{Name: "mihomo", Path: filepath.Join(i.BinDir, "mihomo"), Version: mihomoVersion},
-		{Name: "easytier", Path: filepath.Join(i.BinDir, "easytier-core"), Version: easyTierVersion},
-	}, nil
+	return installed, nil
 }
 
 func (r Request) validate() error {
+	if r.Target == "" {
+		r.Target = "all"
+	}
+	if r.Target != "all" && r.Target != "mihomo" && r.Target != "easytier" {
+		return fmt.Errorf("不支持的组件目标 %q", r.Target)
+	}
 	local := r.MihomoPackage != "" || r.EasyTierPackage != ""
 	if !local {
 		return nil
 	}
-	if r.MihomoPackage == "" || r.EasyTierPackage == "" {
-		return fmt.Errorf("离线安装必须同时指定 --mihomo-package 与 --easytier-package")
+	if r.installMihomo() && r.MihomoPackage == "" || r.installEasyTier() && r.EasyTierPackage == "" {
+		return fmt.Errorf("离线安装必须指定目标组件的包路径")
 	}
-	if r.MihomoVersion != "" || r.EasyTierVersion != "" {
+	packageForMihomoOnly := !r.installEasyTier() && r.EasyTierPackage != ""
+	packageForEasyTierOnly := !r.installMihomo() && r.MihomoPackage != ""
+	if packageForMihomoOnly || packageForEasyTierOnly {
+		return fmt.Errorf("不能为未选择的组件指定离线包")
+	}
+	versionForMihomo := r.installMihomo() && r.MihomoVersion != ""
+	versionForEasyTier := r.installEasyTier() && r.EasyTierVersion != ""
+	if versionForMihomo || versionForEasyTier {
 		return fmt.Errorf("离线包参数不能与版本参数同时使用")
 	}
 	return nil
+}
+
+func (r Request) installMihomo() bool {
+	return r.Target == "" || r.Target == "all" || r.Target == "mihomo"
+}
+
+func (r Request) installEasyTier() bool {
+	return r.Target == "" || r.Target == "all" || r.Target == "easytier"
 }
 
 func (i Installer) acquire(ctx context.Context, dir, name, version, local string) (string, string, error) {

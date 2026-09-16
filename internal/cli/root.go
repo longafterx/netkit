@@ -51,7 +51,11 @@ func newComponentsCommand(runtime commandRuntime) *cobra.Command {
 
 func newComponentsInstallCommand(runtime commandRuntime) *cobra.Command {
 	request := components.Request{}
-	command := newResultCommand(runtime, "install", "Install Mihomo and EasyTier binaries", nil, func(ctx context.Context, application app.Application) app.Result {
+	command := newArgumentCommand(runtime, "install [mihomo|easytier|all]", "Install managed component binaries", cobra.MaximumNArgs(1), func(ctx context.Context, application app.Application, args []string) app.Result {
+		request.Target = "all"
+		if len(args) == 1 {
+			request.Target = args[0]
+		}
 		return application.InstallComponents(ctx, request)
 	})
 	flags := command.Flags()

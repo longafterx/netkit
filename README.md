@@ -87,11 +87,15 @@ netkit easytier apply
 # 组件二进制：在线默认安装 latest，不会自动重启服务
 netkit components install
 netkit components install --mihomo-version vX.Y.Z --easytier-version vY.Z.A
+netkit components install mihomo --mihomo-version vX.Y.Z
+netkit components install easytier --easytier-version vY.Z.A
 
 # 离线包必须明确指定；不联网，也不要求额外校验文件
 netkit components install \
   --mihomo-package /mnt/releases/mihomo-linux-amd64-vX.Y.Z.gz \
   --easytier-package /mnt/releases/easytier-linux-x86_64-vY.Z.A.zip
+netkit components install mihomo \
+  --mihomo-package /mnt/releases/mihomo-linux-amd64-vX.Y.Z.gz
 
 # 配置快照
 netkit backup create
