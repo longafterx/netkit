@@ -24,29 +24,29 @@ Netkit 是一个仅面向 Linux root 用户的网络基础服务运维 CLI。它
 推荐从 GitHub Release 安装。脚本会识别 amd64/arm64、校验 SHA256，将 `netkit` 安装到 `/usr/local/bin`，并在系统支持时安装 Bash、Zsh、Fish 补全：
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/rustyllh/netkit/main/install.sh | sh
+curl -fsSL https://raw.githubusercontent.com/longafterx/netkit/main/install.sh | sh
 netkit --version
 ```
 
 安装指定版本：
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/rustyllh/netkit/main/install.sh | NETKIT_VERSION=v0.1.3 sh
+curl -fsSL https://raw.githubusercontent.com/longafterx/netkit/main/install.sh | NETKIT_VERSION=v0.1.3 sh
 ```
 
 默认安装目录为 `/usr/local/bin`；可通过 `NETKIT_INSTALL_DIR` 覆盖。非 root 用户需要 `sudo`。若已安装 `bash-completion`，脚本会配置 `/root/.bashrc`；重新登录或执行 `source /root/.bashrc` 后生效。
 
-也可使用 Go 从源码编译安装。此方式要求 Go 1.26+，且版本信息不一定包含 Git commit 与构建时间：
+也可使用 Go 从 `main` 分支编译安装。历史版本标签仍声明旧模块路径；新路径的首个版本发布前，使用 `@main` 获取迁移后的代码。此方式要求 Go 1.26+，且版本信息不一定包含 Git commit 与构建时间：
 
 ```bash
-GOBIN=/usr/local/bin go install github.com/rustyllh/netkit/cmd/netkit@latest
+GOBIN=/usr/local/bin go install github.com/longafterx/netkit/cmd/netkit@main
 netkit --version
 ```
 
 私有仓库需要先为 Git 配置访问 GitHub 的凭据，并设置：
 
 ```bash
-go env -w GOPRIVATE=github.com/rustyllh/*
+go env -w GOPRIVATE=github.com/longafterx/*
 ```
 
 安装后的首次检查：

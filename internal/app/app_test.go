@@ -8,9 +8,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/rustyllh/netkit/internal/config"
-	"github.com/rustyllh/netkit/internal/linux"
-	"github.com/rustyllh/netkit/internal/snapshot"
+	"github.com/longafterx/netkit/internal/config"
+	"github.com/longafterx/netkit/internal/linux"
+	"github.com/longafterx/netkit/internal/snapshot"
 )
 
 func TestWaitForCheck(t *testing.T) {

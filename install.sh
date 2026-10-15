@@ -2,7 +2,7 @@
 # Netkit Linux 安装脚本：下载已发布的二进制，校验后安装到指定目录。
 set -eu
 
-repository="${NETKIT_REPOSITORY:-rustyllh/netkit}"
+repository="${NETKIT_REPOSITORY:-longafterx/netkit}"
 install_dir="${NETKIT_INSTALL_DIR:-/usr/local/bin}"
 version="${NETKIT_VERSION:-}"
 bash_completion_loader="${NETKIT_BASH_COMPLETION_LOADER:-/usr/share/bash-completion/bash_completion}"

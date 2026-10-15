@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/rustyllh/netkit/internal/audit"
+	"github.com/longafterx/netkit/internal/audit"
 )
 
 const healthCheckRetryInterval = 200 * time.Millisecond

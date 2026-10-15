@@ -7,7 +7,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/rustyllh/netkit/internal/cli"
+	"github.com/longafterx/netkit/internal/cli"
 )
 
 func main() {

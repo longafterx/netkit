@@ -6,10 +6,10 @@ import (
 	"net"
 	"os"
 
+	"github.com/longafterx/netkit/internal/audit"
+	"github.com/longafterx/netkit/internal/config"
+	"github.com/longafterx/netkit/internal/snapshot"
 	"github.com/pelletier/go-toml/v2"
-	"github.com/rustyllh/netkit/internal/audit"
-	"github.com/rustyllh/netkit/internal/config"
-	"github.com/rustyllh/netkit/internal/snapshot"
 )
 
 // EasyTierStatus 返回 EasyTier 专项状态和网络健康信息。

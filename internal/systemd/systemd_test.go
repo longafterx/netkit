@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/rustyllh/netkit/internal/linux"
+	"github.com/longafterx/netkit/internal/linux"
 )
 
 type fakeRunner struct {

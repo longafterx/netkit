@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/rustyllh/netkit/internal/buildinfo"
-	"github.com/rustyllh/netkit/internal/cli"
+	"github.com/longafterx/netkit/internal/buildinfo"
+	"github.com/longafterx/netkit/internal/cli"
 )
 
 func main() {

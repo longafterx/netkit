@@ -10,9 +10,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/rustyllh/netkit/internal/app"
-	"github.com/rustyllh/netkit/internal/config"
-	"github.com/rustyllh/netkit/internal/linux"
+	"github.com/longafterx/netkit/internal/app"
+	"github.com/longafterx/netkit/internal/config"
+	"github.com/longafterx/netkit/internal/linux"
 	"github.com/spf13/cobra"
 )
 

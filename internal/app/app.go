@@ -4,10 +4,10 @@ package app
 import (
 	"context"
 
-	"github.com/rustyllh/netkit/internal/components"
-	"github.com/rustyllh/netkit/internal/config"
-	"github.com/rustyllh/netkit/internal/linux"
-	"github.com/rustyllh/netkit/internal/systemd"
+	"github.com/longafterx/netkit/internal/components"
+	"github.com/longafterx/netkit/internal/config"
+	"github.com/longafterx/netkit/internal/linux"
+	"github.com/longafterx/netkit/internal/systemd"
 )
 
 // Application 协调 Netkit 的各项用例。

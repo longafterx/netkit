@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/rustyllh/netkit/internal/config"
+	"github.com/longafterx/netkit/internal/config"
 )
 
 func TestCreateAndVerify(t *testing.T) {

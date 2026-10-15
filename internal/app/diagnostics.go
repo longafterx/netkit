@@ -11,7 +11,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/rustyllh/netkit/internal/config"
+	"github.com/longafterx/netkit/internal/config"
 )
 
 // Status 并发检查受管服务的 systemd、端口和配置状态。

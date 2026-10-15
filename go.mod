@@ -1,4 +1,4 @@
-module github.com/rustyllh/netkit
+module github.com/longafterx/netkit
 
 go 1.26
 

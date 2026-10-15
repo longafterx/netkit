@@ -7,8 +7,8 @@ import (
 	"io"
 	"time"
 
-	"github.com/rustyllh/netkit/internal/app"
-	"github.com/rustyllh/netkit/internal/components"
+	"github.com/longafterx/netkit/internal/app"
+	"github.com/longafterx/netkit/internal/components"
 	"github.com/spf13/cobra"
 )
 

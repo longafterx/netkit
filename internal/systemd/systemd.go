@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/rustyllh/netkit/internal/linux"
+	"github.com/longafterx/netkit/internal/linux"
 )
 
 // Client 通过进程执行器读取 systemd unit 状态。

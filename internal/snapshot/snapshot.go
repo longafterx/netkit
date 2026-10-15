@@ -15,7 +15,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/rustyllh/netkit/internal/config"
+	"github.com/longafterx/netkit/internal/config"
 )
 
 // File 表示快照中一个文件的完整性元数据。

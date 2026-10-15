@@ -6,9 +6,9 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/rustyllh/netkit/internal/audit"
-	"github.com/rustyllh/netkit/internal/config"
-	"github.com/rustyllh/netkit/internal/snapshot"
+	"github.com/longafterx/netkit/internal/audit"
+	"github.com/longafterx/netkit/internal/config"
+	"github.com/longafterx/netkit/internal/snapshot"
 )
 
 // MihomoRestart 重载 unit 定义并重启 Mihomo。
